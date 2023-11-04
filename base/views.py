@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
-from . import forms
-from .forms import UserUpdateForm, ProfileUpdateForm
+
+from .forms import RegisterForm, LoginForm, UserUpdateForm, ProfileUpdateForm
 
 
 def home(request):
@@ -18,14 +18,14 @@ def register(request):
         return redirect('home')
 
     if request.method == 'POST':
-        form = forms.RegisterForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             new_user = form.save()
             login(request, new_user)
             messages.success(request, 'Signed Up Successfully!')
             return redirect(reverse('profile', args=[new_user.id]))
     else:
-        form = forms.RegisterForm()
+        form = RegisterForm()
 
     context = {'form': form,
                'page': 'register'}
@@ -38,7 +38,7 @@ def login_(request):
         return redirect('home')
 
     if request.method == 'POST':
-        form = forms.LoginForm(request.POST)
+        form = LoginForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             user = authenticate(
@@ -52,7 +52,7 @@ def login_(request):
             else:
                 messages.error(request, f'Login Failed, try again.')
     else:
-        form = forms.LoginForm()
+        form = LoginForm()
     context = {'form': form}
     return render(request, 'base/register_login.html', context)
 

@@ -10,3 +10,6 @@ class Profile(models.Model):
     prof_pic = models.ImageField(default='default.jpg', upload_to='profile_pics')
     location = models.CharField(null=True, max_length=150)
     bio = models.TextField(null=True)
+
+    def __str__(self):
+        return self.user.username

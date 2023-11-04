@@ -1,0 +1,67 @@
+{% extends 'main.html' %}
+
+{% block nav_options %}
+    {% if user.id == user_.id %}
+        <a href="#" id="showForm">Edit Profile</a>&nbsp;&nbsp;&nbsp;
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div id="content" style="margin: 20px 50px;">
+        <h1>{{user_.username}}</h1>
+        <br>
+        <img src="{{user_.profile.prof_pic.url}}" width="250px">
+        {% if user_.profile.full_name %}
+            <p><b>Name:</b> {{user_.profile.full_name}}</p>
+        {% endif %}
+        <p><b>Email:</b> {{user_.email}}</p>
+        {% if user_.profile.location %}
+            <p><b>Location:</b> {{user_.profile.location}}</p>
+        {% endif %}
+        {% if user_.profile.bio %}
+            <p><b>About Me:</b> {{user_.profile.bio}}</p>
+        {% endif %}
+    </div>
+
+    <div id="form" style="margin: 20px;">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Profile Info</legend>
+                {% for field in u_form %}
+                    <p><b>{{field.label}}</b>:</p>
+
+                    {% for error in field.errors %}
+                        <p style="color: red;">{{ error }}</p>
+                    {% endfor %}
+
+                    {{field}}
+                    <br><br>
+                {% endfor %}
+                {% for field in p_form %}
+                    <p><b>{{field.label}}</b>:</p>
+
+                    {% for error in field.errors %}
+                        <p style="color: red;">{{ error }}</p>
+                    {% endfor %}
+
+                    {{field}}
+                    <br><br>
+                {% endfor %}
+            </fieldset>
+            <div class="form-group">
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block script %}
+    document.getElementById("form").style.display = "none";
+    document.getElementById("showForm").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default behavior of the anchor tag
+
+            // Replace the content with the form
+            document.getElementById("content").style.display = "none";
+            document.getElementById("form").style.display = "block";
+        });
+{% endblock %}

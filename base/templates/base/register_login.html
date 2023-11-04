@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+{% block content %}
+    <h1>
+        {% if page == 'register' %}
+            Register
+        {% else %}
+            Login
+        {% endif %}
+    </h1>
+
+    <div>
+        <form method="post" style="margin: 20px" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+                <p><b>{{field.label}}</b>:</p>
+
+                {% for error in field.errors %}
+                    <p style="color: red;">{{ error }}</p>
+                {% endfor %}
+
+                {{field}}
+                <br><br>
+            {% endfor %}
+
+            <button type="submit">
+                {% if page == 'register' %}
+                    Sign Up
+                {% else %}
+                    Sign In
+                {% endif %}
+            </button>
+        </form>
+        {% if page == 'register' %}
+            <p>Already registered? <a href="{% url 'login' %}">Login</a></p>
+        {% else %}
+            <p>Haven't signed up yet? <a href="{% url 'register' %}">Register</a></p>
+        {% endif %}
+    </div>
+
+{% endblock %}
